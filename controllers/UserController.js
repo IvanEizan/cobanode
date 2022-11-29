@@ -48,6 +48,53 @@ class UserController {
             })
         }
     }
+
+    static async postTestInsert (req, res) {
+        try{
+            
+            const newUser = await User.create({
+                name: "test" ,
+                email : "test@test.com",
+                password : "test",
+                createdAt : new Date,
+                updatedAt : new Date,
+            })
+            if(newUser){
+                return res.json({message:"User created successfully",data:newUser})
+            }
+        
+        }catch(errors){
+            console.log(errors);
+            res.status(400).json({
+                ok: false,
+                errors
+            });
+        }
+    }
+
+    static async postInsert() {
+        // username must be an email
+        body('email').isEmail(),
+        // password must be at least 5 chars long
+        body('password').isLength({ min: 5 }),
+        (req, res) => {
+            // Finds the validation errors in this request and wraps them in an object with handy functions
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+            }
+            console.log("sukses sampe sini");
+            console.log(res);
+            User.create({
+                name: req.body.name ,
+                email : req.body.email,
+                password : req.body.password,
+                createdAt : new Date,
+                updatedAt : new Date,
+            }).then(user => res.json(user));
+        }
+    }
+
 };
 
 module.exports = UserController;
