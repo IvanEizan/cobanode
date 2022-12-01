@@ -46,6 +46,9 @@ app.post(
         }).then(user => res.json(user));
     }
 );
+app.post('/postupdateusers', UserController.postUpdate);
+app.post('/postupsertusers', UserController.postUpdateWithBody);
+app.post('/postDinamicUpsert', UserController.postDinamicUpsert);
 
 app.listen(port, () => {
     console.log(' Server is Running');
