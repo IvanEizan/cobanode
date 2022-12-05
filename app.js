@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 
 app.get('/users', UserController.get);
 app.get('/users/:id', UserController.getdetail);
+app.get('/getDinamics', UserController.getDinamic);
 app.post('/postusers', UserController.postInsert);
 app.post(
     '/postusersvalidated', 

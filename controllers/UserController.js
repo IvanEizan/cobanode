@@ -1,5 +1,5 @@
 const express = require('express');
-const { User } = require('../models');
+const { User, Post } = require('../models');
 // INI UNTUK PAKAI RAW QUERY
 // const Sequelize = require('sequelize');
 // const sequelize = new Sequelize('cobanode', 'postgres', 'sa', {
@@ -7,11 +7,19 @@ const { User } = require('../models');
 // });
   
 class UserController {
-    static async get (req, res) {
+    static async getDinamic (req, res) {
         try {
-            // INI UNTUK PAKAI RAW QUERY
-            // const users = await sequelize.query(`INSERT INTO "Users" ("name", "email", "password", "createdAt", "updatedAt") values ('Far', 'far@gmail.com', 'far', NOW(), NOW())`);
-            const users = await User.findAll();
+            var a;
+            //untuk set modelnya agar tidak string
+            if (req.body.tableName === "User") {
+                a = User
+            }
+            else if (req.body.tableName === "Post") {
+                a = Post
+            }
+            const users = await User.findAll({
+                attributes: ['email', 'password']
+            });
             res.status(200).json({
                 message: 'Success',
                 data: users,
@@ -49,6 +57,22 @@ class UserController {
             })
         }
     }
+
+    static async get (req, res) {
+        try {
+            // INI UNTUK PAKAI RAW QUERY
+            // const users = await sequelize.query(`INSERT INTO "Users" ("name", "email", "password", "createdAt", "updatedAt") values ('Far', 'far@gmail.com', 'far', NOW(), NOW())`);
+            const users = await User.findAll();
+            res.status(200).json({
+                message: 'Success',
+                data: users,
+            });    
+        } catch (error) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            })
+        }
+    };
 
     static async postTestInsert (req, res) {
         try{
@@ -156,9 +180,9 @@ class UserController {
 
 };
 
+
 function updateOrCreate (model, where, newItem) {
     // First try to find the record
-    console.log(model);
     return model
     .findOne({where: where})
     .then(function (foundItem) {
