@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+// const port = 3000;
+const port = process.env.PORT || 8080;
 
 const UserController = require('./controllers/UserController')
 const { body, validationResult } = require('express-validator');

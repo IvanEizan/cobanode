@@ -1,23 +1,9 @@
 {
   "development": {
     "username": "postgres",
-    "password": "sa",
+    "password": "aq-4qmFb",
     "database": "cobanode",
-    "host": "127.0.0.1",
+    "host": "34.128.89.145",
     "dialect": "postgres"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
   }
 }

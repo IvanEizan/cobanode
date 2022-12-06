@@ -1,5 +1,6 @@
 const express = require('express');
 const { User, Post } = require('../models');
+const { updateOrCreate } = require('../helper/helper.js');
 // INI UNTUK PAKAI RAW QUERY
 // const Sequelize = require('sequelize');
 // const sequelize = new Sequelize('cobanode', 'postgres', 'sa', {
@@ -159,6 +160,7 @@ class UserController {
 
     static async postDinamicUpsert(req, res) {
         try{
+            // console.log(abc());
             var a;
             // console.log(req.body.tableName);
             if (req.body.tableName === "User") {
@@ -178,25 +180,6 @@ class UserController {
         }
     };
 
-};
-
-
-function updateOrCreate (model, where, newItem) {
-    // First try to find the record
-    return model
-    .findOne({where: where})
-    .then(function (foundItem) {
-        if (!foundItem) {
-            // Item not found, create a new one
-            return model
-                .create(newItem)
-                .then(function (item) { return  {item: item, created: true}; })
-        }
-         // Found an item, update it
-        return model
-            .update(newItem, {where: where})
-            .then(function (item) { return {item: item, created: false} });
-    });
 };
 
 module.exports = UserController;
