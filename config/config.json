@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "postgres",
-    "password": "aq-4qmFb",
+    "password": "sa",
     "database": "cobanode",
-    "host": "34.128.89.145",
+    "host": "localhost",
     "dialect": "postgres"
   }
 }
