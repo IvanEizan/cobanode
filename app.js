@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const bcrypts = require('bcryptjs')
 
 const app = express();
 // const port = 3000;
 const port = process.env.PORT || 8080;
 
+const { User } = require('./models');
 const MainController = require('./controllers/MainController.js')
 const UserController = require('./controllers/UserController')
 const { body, validationResult } = require('express-validator');
@@ -32,17 +34,19 @@ app.post(
     body('email').isEmail().withMessage('username must be an email'),
     // password must be at least 5 chars long
     body('password').isLength({ min: 5 }).withMessage('must be at least 5 chars longmust be in e-mail format'),
-    (req, res) => {
+    async (req, res) => {
         // Finds the validation errors in this request and wraps them in an object with handy functions
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
         }
-        
+
+        const hashedpassword = await bcrypts.hash(req.body.password, 10)
+
         User.create({
             name: req.body.name ,
             email : req.body.email,
-            password : req.body.password,
+            password : hashedpassword,
             createdAt : new Date,
             updatedAt : new Date,
         }).then(user => res.json(user));

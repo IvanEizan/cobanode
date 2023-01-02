@@ -60,7 +60,7 @@ class MainController {
         try {
             const { email, password } = req.body
             if (email && password) {
-                const user = await User.findOne({ where: { email: email, password: password } })
+                const user = await User.findOne({ where: { email: email } })
                 if (user) {
                   const isValidPass = comparePassword(password, user.password)
                   console.log(password, user.password);
@@ -70,7 +70,8 @@ class MainController {
                       email: user.email
                     }
                     res.status(200).json({
-                      access_token: createToken(payload)
+                        message: "Allowed",
+                        access_token: createToken(payload)
                     })
                   } else {
                     throw ({

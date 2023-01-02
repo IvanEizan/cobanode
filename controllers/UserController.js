@@ -1,6 +1,7 @@
 const express = require('express');
 const { User, Post } = require('../models');
 const { updateOrCreate } = require('../helper/helper.js');
+const bcrypts = require('bcryptjs')
 // INI UNTUK PAKAI RAW QUERY
 // const Sequelize = require('sequelize');
 // const sequelize = new Sequelize('cobanode', 'postgres', 'sa', {
@@ -80,7 +81,7 @@ class UserController {
         body('email').isEmail(),
         // password must be at least 5 chars long
         body('password').isLength({ min: 5 }),
-        (req, res) => {
+        async (req, res) => {
             // Finds the validation errors in this request and wraps them in an object with handy functions
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -88,10 +89,11 @@ class UserController {
             }
             console.log("sukses sampe sini");
             console.log(res);
+            const hashedpassword = await bcrypts.hash(req.body.password, 10)
             User.create({
                 name: req.body.name ,
                 email : req.body.email,
-                password : req.body.password,
+                password : hashedpassword,
                 createdAt : new Date,
                 updatedAt : new Date,
             }).then(user => res.json(user));
