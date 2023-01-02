@@ -8,29 +8,6 @@ const { updateOrCreate } = require('../helper/helper.js');
 // });
   
 class UserController {
-    static async getDinamic (req, res) {
-        try {
-            var a;
-            //untuk set modelnya agar tidak string
-            if (req.body.tableName === "User") {
-                a = User
-            }
-            else if (req.body.tableName === "Post") {
-                a = Post
-            }
-            const users = await User.findAll({
-                attributes: ['email', 'password']
-            });
-            res.status(200).json({
-                message: 'Success',
-                data: users,
-            });    
-        } catch (error) {
-            res.status(500).json({
-                message: 'Internal Server Error'
-            })
-        }
-    };
 
     static async getdetail (req, res) {
         try {
@@ -158,27 +135,27 @@ class UserController {
         }
     };
 
-    static async postDinamicUpsert(req, res) {
-        try{
-            // console.log(abc());
-            var a;
-            // console.log(req.body.tableName);
-            if (req.body.tableName === "User") {
-                a = User
-            }
-            const atas = await updateOrCreate(a, req.body.tableUnique, req.body.details);
-            res.status(200).json({
-                message: 'Success',
-                created: atas.created,
-            });    
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({
-                message: 'Internal Server Error',
-                messageDetail: error,
-            })
-        }
-    };
+    // static async postDinamicUpsert(req, res) {
+    //     try{
+    //         // console.log(abc());
+    //         var a;
+    //         // console.log(req.body.tableName);
+    //         if (req.body.tableName === "User") {
+    //             a = User
+    //         }
+    //         const atas = await updateOrCreate(a, req.body.tableUnique, req.body.details);
+    //         res.status(200).json({
+    //             message: 'Success',
+    //             created: atas.created,
+    //         });    
+    //     } catch (error) {
+    //         console.log(error);
+    //         res.status(500).json({
+    //             message: 'Internal Server Error',
+    //             messageDetail: error,
+    //         })
+    //     }
+    // };
 
 };
 

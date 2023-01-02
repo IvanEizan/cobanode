@@ -1,3 +1,7 @@
+const bcrypts = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const secret = 'babigendut'
+
 function updateOrCreate (model, where, newItem) {
     // First try to find the record
     return model
@@ -16,4 +20,23 @@ function updateOrCreate (model, where, newItem) {
     });
 };
 
-module.exports = {updateOrCreate}
+
+function hashPassword (password) {
+  const salt = bcrypts.genSaltSync(8)
+  const hash = bcrypts.hashSync(password, salt)
+  return hash
+}
+
+function comparePassword (passwordLogin, passwordDatabase) {
+  return bcrypts.compareSync(passwordLogin, passwordDatabase)
+}
+
+function createToken (payload) {
+return jwt.sign(payload, secret)
+}
+
+function verifyToken (token) {
+return jwt.verify(token, secret)
+}
+
+module.exports = {updateOrCreate, hashPassword, comparePassword, createToken, verifyToken}

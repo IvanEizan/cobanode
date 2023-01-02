@@ -5,6 +5,7 @@ const app = express();
 // const port = 3000;
 const port = process.env.PORT || 8080;
 
+const MainController = require('./controllers/MainController.js')
 const UserController = require('./controllers/UserController')
 const { body, validationResult } = require('express-validator');
 
@@ -22,7 +23,6 @@ app.get('/', (req, res) => {
 
 app.get('/users', UserController.get);
 app.get('/users/:id', UserController.getdetail);
-app.get('/getDinamics', UserController.getDinamic);
 app.post('/postusers', UserController.postInsert);
 app.post(
     '/postusersvalidated', 
@@ -50,8 +50,12 @@ app.post(
 );
 app.post('/postupdateusers', UserController.postUpdate);
 app.post('/postupsertusers', UserController.postUpdateWithBody);
-app.post('/postDinamicUpsert', UserController.postDinamicUpsert);
+app.post('/postLogin', MainController.postLogin);
+
+// dinamic query here
+app.get('/getDinamics', MainController.getDinamic);
+app.post('/postDinamicUpsert', MainController.postDinamicUpsert);
 
 app.listen(port, () => {
-    console.log(' Server is Running');
+    console.log('Server is Running. Port = ' + port);
 });
