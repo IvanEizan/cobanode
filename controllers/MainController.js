@@ -1,6 +1,6 @@
 const express = require('express');
 const { User, Post } = require('../models');
-const { updateOrCreate, comparePassword, createToken } = require('../helper/helper.js');
+const { updateOrCreate, comparePassword, createToken, verifyToken } = require('../helper/helper.js');
 
 class MainController {
     
@@ -96,6 +96,24 @@ class MainController {
         }
     };
 
+    static async checkToken (req, res, next) {
+        try {
+            const authHeader = req.headers['authorization']
+            const token = authHeader && authHeader.split(' ')[1]
+            if (token == null) return res.sendStatus(401)
+            verifyToken(token)
+            res.status(200).json({
+                message: "Authorized",
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: 'Internal Server Error',
+                messageDetail: error,
+            })
+        }
+        
+    };
+    
 }
 
 module.exports = MainController;

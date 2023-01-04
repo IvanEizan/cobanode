@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const bcrypts = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const secret = 'babigendut'
@@ -32,11 +34,11 @@ function comparePassword (passwordLogin, passwordDatabase) {
 }
 
 function createToken (payload) {
-return jwt.sign(payload, secret)
+  return jwt.sign(payload, process.env.TOKEN_SECRET_KEY)
 }
 
 function verifyToken (token) {
-return jwt.verify(token, secret)
+  jwt.verify(token, process.env.TOKEN_SECRET_KEY)
 }
 
 module.exports = {updateOrCreate, hashPassword, comparePassword, createToken, verifyToken}

@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const bcrypts = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 const app = express();
 // const port = 3000;
-const port = process.env.PORT || 8080;
+const port = process.env.PORT_MAIN || 8080;
 
 const { User } = require('./models');
 const MainController = require('./controllers/MainController.js')
@@ -55,10 +57,33 @@ app.post(
 app.post('/postupdateusers', UserController.postUpdate);
 app.post('/postupsertusers', UserController.postUpdateWithBody);
 app.post('/postLogin', MainController.postLogin);
+app.get('/checkToken', MainController.checkToken);
 
 // dinamic query here
 app.get('/getDinamics', MainController.getDinamic);
 app.post('/postDinamicUpsert', MainController.postDinamicUpsert);
+app.post('/postTest', authenticateToken, (req, res) => {
+    res.json(req.payload)
+});
+
+function authenticateToken(req, res, next) {
+    try {
+        const authHeader = req.headers['authorization']
+        const token = authHeader && authHeader.split(' ')[1]
+        if (token == null) return res.sendStatus(401)
+
+        jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, payload) => {
+            if(err) return res.sendStatus(403)
+            req.payload = payload
+            next()
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal Server Error',
+            messageDetail: error,
+        })
+    }
+}
 
 app.listen(port, () => {
     console.log('Server is Running. Port = ' + port);
